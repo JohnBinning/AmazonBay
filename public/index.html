@@ -3,35 +3,41 @@
   <head>
     <meta charset="utf-8">
     <title>Amazon Bay</title>
+    <link rel='stylesheet' type='text/css' href='/styles/main.css' />
+
   </head>
   <body>
     <header>AmazonBay</header>
 
-    <article id='login'>
+    <article id='login-section'>
       <input id='username' placeholder='username'>
       <input id='password' placeholder='password' type='password'>
+      <button id='login'>LOGIN</button>
     </article>
 
-    <section id='products-section'>
+    <section id='bottom-section'>
 
-    </section>
+       <section class='cart sidebar'>
+        <div class='sidebar-toggle toggle-cart'>
+          +
+        </div>
+        <div class='sidebar-text cart-text'>
+          Cart
+        </div>
+      </section>
 
-    <section class='cart sidebar'>
-      <div class='sidebar-toggle toggle-cart'>
-        +
-      </div>
-      <div class='sidebar-text cart-text'>
-        Cart
-      </div>
-    </section>
+      <section id='products-section'>
 
-    <section class='order-history sidebar'>
-      <div class='sidebar-toggle toggle-order-history'>
-        +
-      </div>
-      <div class='sidebar-text order-text'>
-        Order History
-      </div>
+      </section>
+
+      <section class='order-history sidebar'>
+        <div class='sidebar-toggle toggle-order-history'>
+          +
+        </div>
+        <div class='sidebar-text order-text'>
+          Order History
+        </div>
+      </section>
     </section>
 
     <script src='./lib/jquery.js'></script>
