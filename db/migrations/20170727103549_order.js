@@ -3,7 +3,7 @@ exports.up = function (knex, Promise) {
     knex.schema.createTable('orders', (table) => {
       table.increments('id').primary();
       table.integer('price');
-      table.timestamps();
+      table.timestamps(true, true);
     }),
   ]);
 };

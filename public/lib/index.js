@@ -5,12 +5,20 @@ const findDuplicates = (cart, title) => {
   });
 };
 
-const addToCart = (item) => {
-  const { title, price, formattedPrice } = item;
+const updateStoragePrice = (amount, reset) => {
+  let price = JSON.parse(localStorage.getItem('price'));
+  if (!price) {
+    price = 0;
+  }
+  reset ? price = 0 : price += amount;
+  localStorage.setItem('price', JSON.stringify(price))
+}
+
+const addToCartStorage = (item) => {
+  const { title, price } = item;
 
   const body = {
     title,
-    formattedPrice,
     price
   };
 
@@ -22,23 +30,44 @@ const addToCart = (item) => {
 
   const duplicateItems = findDuplicates(cart, title);
 
-  duplicateItems ? false : cart.push(body);
+  if(!duplicateItems) {
+    cart.push(body);
+    updateStoragePrice(price)
+  }
   localStorage.setItem('cart', JSON.stringify(cart));
+};
+
+const getOrderHistory = () => {
+  fetch('/api/v1/orders')
+  .then((response) => response.json())
+  .then((data) => {
+    setTimeout(() => { 
+      $('#order-target').html('')
+      $('#order-target').toggleClass('hidden');
+      data.forEach((order) => {
+        const formattedOrder = `
+        <article class='order-card'>
+          <h4 class='order-price'>Order total: $${order.price / 100}</h4>
+          <p class='order-time'>Date purchased: ${order.created_at.slice(0, 10)}</p>
+        </article>`
+        $('#order-target').prepend(formattedOrder)
+      })
+    }, 200);
+  })
 };
 
 
 const addItemToPage = (data) => {
   data.forEach((item) => {
     const { title, image_url, description, price } = item;
-    let priceString = price.toString();
-    let spliceIndex = priceString.length - 2;
-    let formattedPrice = priceString.slice(0, spliceIndex) + '.' + priceString.slice(spliceIndex);
+    const formattedPrice = price / 100;
+
     const formattedItem = `
       <article class='card'>
         <h3 class='item-title'>${title}</h3>
         <img src='${image_url}' class='card-image' alt='${item.title}'>
         <p class='item-description>${description}</p>
-        <p class='item-price'>${formattedPrice}</p>
+        <p class='item-price'>$${formattedPrice}</p>
         <button class='add-to-cart'>ADD TO CART</button>
       </article>
       `
@@ -46,10 +75,10 @@ const addItemToPage = (data) => {
     $('.add-to-cart').on('click', () => {
       const itemToAdd = {
         title,
-        formattedPrice,
         price
       };
-      addToCart(itemToAdd);
+      addToCartStorage(itemToAdd);
+      updateCartTotal()
       })
   });
 };
@@ -66,3 +95,78 @@ const loadInventory = function() {
 };
 
 loadInventory();
+
+const updateCartTotal = () => {
+  let updatePrice = JSON.parse(localStorage.getItem('price'))
+  $('#cart-total-amount').html(`${updatePrice / 100}`)
+};
+
+const prependToCart = (items) => {
+  items.forEach((item) => {
+    const { title, price } = item;
+    const formattedPrice = price / 100;
+    const card = `
+      <article class='cart-card'>
+        <h4 class='cart-card-title'>${title}</h4>
+        <div class='cart-card-price'>$<span class='cart-card-price-amount'>${formattedPrice}</span></div>
+      </article>`
+    $('.cart-target').prepend(card);
+  });
+  updateCartTotal()
+};
+
+const showCartContent = () => {
+  let items = JSON.parse(localStorage.getItem('cart'));
+  setTimeout(() => { 
+    $('#cart-total-text').toggleClass('hidden');
+    $('#checkout').toggleClass('hidden');
+
+    if (!items) {
+      $('.cart-target').prepend(`<div class='empty-cart'>Your cart is empty</div>`)
+      $('#cart-total-amount').html('0')
+    } else {
+      prependToCart(items);
+    }
+  }, 280);
+};
+
+const hideCartCards = () => {
+  setTimeout(() => { 
+    $('#cart-total-text').toggleClass('hidden');
+    $('#checkout').toggleClass('hidden');
+    $('.cart-target').html('');
+  }, 280);
+}
+
+$('.toggle-cart').on('click', () => {
+  let currentWidth = $('.cart').width() == 100 ? '300px' : '100px';
+  currentWidth === '100px' ? hideCartCards() : showCartContent()
+  $('.cart').animate({width: currentWidth});
+});
+
+const prependOrders = () => {
+  getOrderHistory()
+}
+
+$('.toggle-order-history').on('click', () => {
+  let currentWidth = $('.order-history').width() == 100 ? '300px' : '100px';
+  $('.order-history').animate({width: currentWidth});
+  getOrderHistory()
+});
+
+
+
+$('#checkout').on('click', () => {
+  let price = JSON.parse(localStorage.getItem('price'))
+  console.log('price', price)
+  fetch(`/api/v1/orders/${price}`, {
+      method: 'POST'
+    })
+    .then(resp => {
+      return resp.json()
+    })
+    localStorage.clear()
+});
+
+
+updateCartTotal();

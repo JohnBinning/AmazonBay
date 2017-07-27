@@ -9,26 +9,7 @@
   <body>
     <header>AmazonBay</header>
 
-    <article id='login-section'>
-      <input id='username' placeholder='username'>
-      <input id='password' placeholder='password' type='password'>
-      <button id='login'>LOGIN</button>
-    </article>
-
     <section id='bottom-section'>
-
-       <section class='cart sidebar'>
-        <div class='sidebar-toggle toggle-cart'>
-          +
-        </div>
-        <div class='sidebar-text cart-text'>
-          Cart
-        </div>
-      </section>
-
-      <section id='products-section'>
-
-      </section>
 
       <section class='order-history sidebar'>
         <div class='sidebar-toggle toggle-order-history'>
@@ -37,7 +18,30 @@
         <div class='sidebar-text order-text'>
           Order History
         </div>
+
+        <div id='order-target' class='hidden'></div>
       </section>
+
+      <section id='products-section'>
+
+      </section>
+
+      <section class='cart sidebar'>
+        <div class='sidebar-toggle toggle-cart'>
+          +
+        </div>
+        <div class='sidebar-text cart-text'>
+          Cart
+        </div>
+        <button id='checkout' class='hidden'>Checkout</button>
+        <div id='cart-total'>
+          <p id='cart-total-text' class='hidden'>total: $<span id='cart-total-amount'>999</span>
+        </div>
+        <article class='cart-target'></article>
+
+      </section>
+
+      
     </section>
 
     <script src='./lib/jquery.js'></script>

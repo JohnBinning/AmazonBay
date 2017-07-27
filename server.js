@@ -41,6 +41,35 @@ app.get('/api/v1/inventory', (request, response) => {
   });
 });
 
+app.get('/api/v1/orders', (request, response) => {
+  database('orders').select()
+    .then((orders) => {
+      if (orders.length) {
+        response.status(200).json(orders);
+      } else {
+        response.status(404).json({
+          error: 'No orders found'
+        });
+      }
+    })
+  .catch((error) => {
+    response.status(500).json({ error });
+  });
+});
+
+app.post('/api/v1/orders/:price', (request, response) => {
+  const order = {price: request.params.price}
+  console.log(order, 'order');
+  database('orders').insert(order, 'id')
+  .then((order_id) => {
+    response.status(201).json({ id: order_id[0] });
+  })
+  .catch((error) => {
+    console.log(error, 'error')
+    response.status(500).json({ error });
+  });
+})
+
 
 app.listen(port, () => {
   console.log(`AmazonBay server listening on port ${port}!`);

@@ -4,11 +4,19 @@
 
 .cart {
   border: 1px solid tomato;
+  width: 100px;
+  position: absolute;
+  right: 0;
+  height: 100%;
 }
 
 .order-history {
   border: 1px solid purple;
   color: magenta;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 100px;
 }
 
 #bottom-section {
@@ -19,6 +27,10 @@
 #products-section {
   height: 80%;
   width: 60%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+  justify-content: center;
 }
 
 .card {
@@ -35,4 +47,17 @@
   height: 50px;
   color: black;
   background-color: green;
+}
+
+.sidebar-toggle {
+  border: 1px solid black;
+  height: 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
 }
