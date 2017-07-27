@@ -37,6 +37,25 @@ const addToCartStorage = (item) => {
   localStorage.setItem('cart', JSON.stringify(cart));
 };
 
+const getOrderHistory = () => {
+  fetch('/api/v1/orders')
+  .then((response) => response.json())
+  .then((data) => {
+    setTimeout(() => { 
+      $('#order-target').html('')
+      $('#order-target').toggleClass('hidden');
+      data.forEach((order) => {
+        const formattedOrder = `
+        <article class='order-card'>
+          <h4 class='order-price'>Order total: $${order.price / 100}</h4>
+          <p class='order-time'>Date purchased: ${order.created_at.slice(0, 10)}</p>
+        </article>`
+        $('#order-target').prepend(formattedOrder)
+      })
+    }, 200);
+  })
+};
+
 
 const addItemToPage = (data) => {
   data.forEach((item) => {
@@ -125,14 +144,29 @@ $('.toggle-cart').on('click', () => {
   $('.cart').animate({width: currentWidth});
 });
 
+const prependOrders = () => {
+  getOrderHistory()
+}
+
 $('.toggle-order-history').on('click', () => {
   let currentWidth = $('.order-history').width() == 100 ? '300px' : '100px';
   $('.order-history').animate({width: currentWidth});
+  getOrderHistory()
 });
 
+
+
 $('#checkout').on('click', () => {
-  console.log('checked out')
-})
+  let price = JSON.parse(localStorage.getItem('price'))
+  console.log('price', price)
+  fetch(`/api/v1/orders/${price}`, {
+      method: 'POST'
+    })
+    .then(resp => {
+      return resp.json()
+    })
+    localStorage.clear()
+});
 
 
 updateCartTotal();
