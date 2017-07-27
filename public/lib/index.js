@@ -5,6 +5,10 @@ const findDuplicates = (cart, title) => {
   });
 };
 
+const clearCartTarget = () => {
+  $('.cart-target').html('');
+}
+
 const updateStoragePrice = (amount, reset) => {
   let price = JSON.parse(localStorage.getItem('price'));
   if (!price) {
@@ -56,6 +60,20 @@ const getOrderHistory = () => {
   })
 };
 
+const prependToCart = (items) => {
+  items.forEach((item) => {
+    const { title, price } = item;
+    const formattedPrice = price / 100;
+    const card = `
+      <article class='cart-card'>
+        <h4 class='cart-card-title'>${title}</h4>
+        <div class='cart-card-price'>$<span class='cart-card-price-amount'>${formattedPrice}</span></div>
+      </article>`
+    $('.cart-target').prepend(card);
+    console.log('prepend to cart')
+  });
+  updateCartTotal()
+};
 
 const addItemToPage = (data) => {
   data.forEach((item) => {
@@ -77,7 +95,11 @@ const addItemToPage = (data) => {
         title,
         price
       };
+      clearCartTarget();
+      console.log('add item to page called')
       addToCartStorage(itemToAdd);
+      let items = JSON.parse(localStorage.getItem('cart'));
+      prependToCart(items)
       updateCartTotal()
       })
   });
@@ -90,7 +112,7 @@ const loadInventory = function() {
       addItemToPage(data);   
   })
   .catch((error) => {
-    console.log(error, 'something went getting the inventory')
+    console.log(error, 'something went wrong getting the inventory')
   });
 };
 
@@ -99,20 +121,6 @@ loadInventory();
 const updateCartTotal = () => {
   let updatePrice = JSON.parse(localStorage.getItem('price'))
   $('#cart-total-amount').html(`${updatePrice / 100}`)
-};
-
-const prependToCart = (items) => {
-  items.forEach((item) => {
-    const { title, price } = item;
-    const formattedPrice = price / 100;
-    const card = `
-      <article class='cart-card'>
-        <h4 class='cart-card-title'>${title}</h4>
-        <div class='cart-card-price'>$<span class='cart-card-price-amount'>${formattedPrice}</span></div>
-      </article>`
-    $('.cart-target').prepend(card);
-  });
-  updateCartTotal()
 };
 
 const showCartContent = () => {
@@ -134,7 +142,7 @@ const hideCartCards = () => {
   setTimeout(() => { 
     $('#cart-total-text').toggleClass('hidden');
     $('#checkout').toggleClass('hidden');
-    $('.cart-target').html('');
+    clearCartTarget();
   }, 280);
 }
 
@@ -158,15 +166,15 @@ $('.toggle-order-history').on('click', () => {
 
 $('#checkout').on('click', () => {
   let price = JSON.parse(localStorage.getItem('price'))
-  console.log('price', price)
   fetch(`/api/v1/orders/${price}`, {
       method: 'POST'
     })
     .then(resp => {
       return resp.json()
     })
-    localStorage.clear()
+    localStorage.clear();
+    updateCartTotal();
+    clearCartTarget();
 });
-
 
 updateCartTotal();
