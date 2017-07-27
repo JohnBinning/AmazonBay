@@ -1,0 +1,33 @@
+{
+  "name": "mod4final",
+  "version": "1.0.0",
+  "description": "A Shopping App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnBinning/AmazonBay.git"
+  },
+  "keywords": [],
+  "author": "John Binning",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnBinning/AmazonBay/issues"
+  },
+  "homepage": "https://github.com/JohnBinning/AmazonBay#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
+    "knex": "^0.13.0",
+    "node": "^8.2.1",
+    "pg": "^7.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.4.2"
+  }
+}
