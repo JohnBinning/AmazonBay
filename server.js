@@ -57,15 +57,13 @@ app.get('/api/v1/orders', (request, response) => {
   });
 });
 
-app.post('/api/v1/orders/:price', (request, response) => {
+app.post('/api/v1/orders/:price/', (request, response) => {
   const order = {price: request.params.price}
-  console.log(order, 'order');
   database('orders').insert(order, 'id')
   .then((order_id) => {
     response.status(201).json({ id: order_id[0] });
   })
   .catch((error) => {
-    console.log(error, 'error')
     response.status(500).json({ error });
   });
 })
