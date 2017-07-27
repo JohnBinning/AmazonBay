@@ -128,6 +128,8 @@ const showCartContent = () => {
   setTimeout(() => { 
     $('#cart-total-text').toggleClass('hidden');
     $('#checkout').toggleClass('hidden');
+    $('.cart-target').toggleClass('hidden');
+
 
     if (!items) {
       $('.cart-target').prepend(`<div class='empty-cart'>Your cart is empty</div>`)
@@ -142,6 +144,7 @@ const hideCartCards = () => {
   setTimeout(() => { 
     $('#cart-total-text').toggleClass('hidden');
     $('#checkout').toggleClass('hidden');
+    $('.cart-target').toggleClass('hidden');
     clearCartTarget();
   }, 280);
 }
