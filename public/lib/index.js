@@ -5,12 +5,11 @@ const findDuplicates = (cart, title) => {
   });
 };
 
-const addToCart = (item) => {
-  const { title, price, formattedPrice } = item;
+const addToCartStorage = (item) => {
+  const { title, price } = item;
 
   const body = {
     title,
-    formattedPrice,
     price
   };
 
@@ -30,15 +29,14 @@ const addToCart = (item) => {
 const addItemToPage = (data) => {
   data.forEach((item) => {
     const { title, image_url, description, price } = item;
-    let priceString = price.toString();
-    let spliceIndex = priceString.length - 2;
-    let formattedPrice = priceString.slice(0, spliceIndex) + '.' + priceString.slice(spliceIndex);
+    const formattedPrice = price / 100;
+
     const formattedItem = `
       <article class='card'>
         <h3 class='item-title'>${title}</h3>
         <img src='${image_url}' class='card-image' alt='${item.title}'>
         <p class='item-description>${description}</p>
-        <p class='item-price'>${formattedPrice}</p>
+        <p class='item-price'>$${formattedPrice}</p>
         <button class='add-to-cart'>ADD TO CART</button>
       </article>
       `
@@ -46,10 +44,9 @@ const addItemToPage = (data) => {
     $('.add-to-cart').on('click', () => {
       const itemToAdd = {
         title,
-        formattedPrice,
         price
       };
-      addToCart(itemToAdd);
+      addToCartStorage(itemToAdd);
       })
   });
 };
@@ -66,3 +63,13 @@ const loadInventory = function() {
 };
 
 loadInventory();
+
+$('.toggle-cart').on('click', () => {
+  let currentWidth = $('.cart').width() == 100 ? '300px' : '100px';
+  $('.cart').animate({width: currentWidth});
+})
+
+$('.toggle-order-history').on('click', () => {
+  let currentWidth = $('.order-history').width() == 100 ? '300px' : '100px';
+  $('.order-history').animate({width: currentWidth});
+})
