@@ -67,7 +67,7 @@ const prependToCart = (items) => {
     const card = `
       <article class='cart-card'>
         <h4 class='cart-card-title'>${title}</h4>
-        <div class='cart-card-price'>$<span class='cart-card-price-amount'>${formattedPrice}</span></div>
+        <div class='cart-card-price'>Price: $<span class='cart-card-price-amount'>${formattedPrice}</span></div>
       </article>`
     $('.cart-target').prepend(card);
   });
