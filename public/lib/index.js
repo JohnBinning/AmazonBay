@@ -70,7 +70,6 @@ const prependToCart = (items) => {
         <div class='cart-card-price'>$<span class='cart-card-price-amount'>${formattedPrice}</span></div>
       </article>`
     $('.cart-target').prepend(card);
-    console.log('prepend to cart')
   });
   updateCartTotal()
 };
@@ -83,9 +82,9 @@ const addItemToPage = (data) => {
     const formattedItem = `
       <article class='card'>
         <h3 class='item-title'>${title}</h3>
+        <p class='item-description'>Description: ${description}</p>
         <img src='${image_url}' class='card-image' alt='${item.title}'>
-        <p class='item-description>${description}</p>
-        <p class='item-price'>$${formattedPrice}</p>
+        <p class='item-price'>Price: $${formattedPrice}</p>
         <button class='add-to-cart'>ADD TO CART</button>
       </article>
       `
@@ -96,7 +95,6 @@ const addItemToPage = (data) => {
         price
       };
       clearCartTarget();
-      console.log('add item to page called')
       addToCartStorage(itemToAdd);
       let items = JSON.parse(localStorage.getItem('cart'));
       prependToCart(items)
