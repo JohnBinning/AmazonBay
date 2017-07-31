@@ -14,7 +14,6 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-
 describe('top level befores', () => {
 
   before(done => {
@@ -85,6 +84,18 @@ describe('top level befores', () => {
         response.body.length.should.equal(2);
         done();
       });
+    });
+
+    it('should not get the orders if there are none', (done) => {
+        database('orders').del()
+        .then( () => {
+          chai.request(server)
+          .get('/api/v1/orders')
+          .end((err, response) => {
+            response.should.have.status(404);
+            done();
+          });
+        })
     });
 
     it('should post an order', (done) => {
