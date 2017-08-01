@@ -41,21 +41,24 @@ const addToCartStorage = (item) => {
   localStorage.setItem('cart', JSON.stringify(cart));
 };
 
+const prependOrders = (data) => {
+  data.forEach((order) => {
+    const formattedOrder = `
+    <article class='order-card'>
+      <h4 class='order-price'>Order total: $${order.price / 100}</h4>
+      <p class='order-time'>Date purchased: ${order.created_at.slice(0, 10)}</p>
+    </article>`
+    $('#order-target').prepend(formattedOrder);
+  });
+}
+
 const getOrderHistory = () => {
   fetch('/api/v1/orders')
   .then((response) => response.json())
   .then((data) => {
     setTimeout(() => { 
       $('#order-target').html('')
-      $('#order-target').toggleClass('hidden');
-      data.forEach((order) => {
-        const formattedOrder = `
-        <article class='order-card'>
-          <h4 class='order-price'>Order total: $${order.price / 100}</h4>
-          <p class='order-time'>Date purchased: ${order.created_at.slice(0, 10)}</p>
-        </article>`
-        $('#order-target').prepend(formattedOrder)
-      })
+      prependOrders(data);
     }, 200);
   })
   .catch((error) => {
@@ -74,7 +77,7 @@ const prependToCart = (items) => {
       </article>`
     $('.cart-target').prepend(card);
   });
-  updateCartTotal()
+  updateCartTotal();
 };
 
 const addItemToPage = (data) => {
@@ -156,13 +159,12 @@ $('.toggle-cart').on('click', () => {
   $('.cart').animate({width: currentWidth});
 });
 
-const prependOrders = () => {
-  getOrderHistory()
-}
-
 $('.toggle-order-history').on('click', () => {
   let currentWidth = $('.order-history').width() == 100 ? '300px' : '100px';
   $('.order-history').animate({width: currentWidth});
+  setTimeout(() => {
+    $('#order-target').toggleClass('hidden');
+  }, 140);
   getOrderHistory()
 });
 
@@ -174,7 +176,8 @@ $('#checkout').on('click', () => {
       method: 'POST'
     })
     .then(resp => {
-      return resp.json()
+      getOrderHistory();
+      return resp.json();
     })
     .catch((error) => {
     console.log(error, 'something went wrong processing the order')

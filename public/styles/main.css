@@ -137,6 +137,7 @@ h3 {
   align-items: center;
   justify-content: flex-start;
   text-align: center;
+  height: 250%;
 }
 
  
@@ -165,9 +166,9 @@ h3 {
   text-align: center;
   display: flex;
   align-items: center;
+  z-index: 3;
   justify-content: center;
   background-color: #F19F4d;
-  background-color: rgba(68÷, 132, 206, .7);
 }
 
 .order-time {
