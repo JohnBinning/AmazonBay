@@ -58,6 +58,9 @@ const getOrderHistory = () => {
       })
     }, 200);
   })
+  .catch((error) => {
+    console.log(error, 'something went wrong getting the order history')
+  });
 };
 
 const prependToCart = (items) => {
@@ -173,6 +176,9 @@ $('#checkout').on('click', () => {
     .then(resp => {
       return resp.json()
     })
+    .catch((error) => {
+    console.log(error, 'something went wrong processing the order')
+  });
     localStorage.clear();
     updateCartTotal();
     clearCartTarget();
